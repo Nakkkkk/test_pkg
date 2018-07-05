@@ -12,6 +12,8 @@ class Lisner
   private:
     ros::NodeHandle n;
     ros::Subscriber sub;
+
+//  void chatterCallback(const std_msgs::String::ConstPtr& msg);
 };
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg);

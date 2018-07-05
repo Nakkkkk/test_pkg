@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   actionlib
   actionlib_msgs
+  sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -231,4 +232,5 @@ include_directories(
 #  ${test_pkg_EXPORTED_TARGETS}
 #)
 
-add_subdirectory(src src)
+add_subdirectory(src1 src1)
+add_subdirectory(src2 src2)

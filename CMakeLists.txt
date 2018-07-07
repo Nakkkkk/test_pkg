@@ -7,6 +7,12 @@ project(test_pkg)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+
+find_package(Boost REQUIRED COMPONENTS system filesystem thread)
+#find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(PCL REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
@@ -16,10 +22,14 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   actionlib_msgs
   sensor_msgs
+  pcl_conversions
+  pcl_msgs
+#  tf
+#　　tf2_eigen
 )
 
 ## System dependencies are found with CMake's conventions
- find_package(Boost REQUIRED COMPONENTS system)
+# find_package(Boost REQUIRED COMPONENTS system)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -128,6 +138,9 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+#  ${Eigen_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -234,3 +247,9 @@ include_directories(
 
 add_subdirectory(src1 src1)
 add_subdirectory(src2 src2)
+
+link_directories(
+  ${Boost_LIBRARY_DIRS}
+  ${Eigen_LIBRARY_DIRS}
+  ${PCL_LIBRARY_DIRS}
+)

@@ -15,5 +15,5 @@ add_executable(listenerpc2
     ${HOGE_SRCS}
     ${HOGE_HDRS}
 )
-target_link_libraries(listenerpc2 ${catkin_LIBRARIES})
+target_link_libraries(listenerpc2 ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${PCL_LIBRARIES})
 

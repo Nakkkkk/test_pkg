@@ -12,6 +12,9 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl_ros/point_cloud.h>
 
+#include <iostream>
+#include <pcl/io/pcd_io.h>
+
 class Listenerpc2
 {
   public:

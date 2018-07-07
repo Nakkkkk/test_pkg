@@ -9,8 +9,28 @@ void listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg)
   pcl::fromROSMsg (*msg, cloud);
 
   printf ("Cloud: width = %d, height = %d\n", cloud.width, cloud.height);
-  BOOST_FOREACH (const pcl::PointXYZ& pt, cloud.points)
-  printf ("\t(%f, %f, %f)\n", pt.x, pt.y, pt.z);
+//  BOOST_FOREACH (const pcl::PointXYZ& pt, cloud.points)
+//  printf ("\t(%f, %f, %f)\n", pt.x, pt.y, pt.z);
+
+
+  cloud.is_dense = false;
+  cloud.points.resize (cloud.width * cloud.height);
+/*
+  for (size_t i = 0; i < cloud.points.size (); ++i)
+  {
+    cloud.points[i].x = 1024 * rand () / (RAND_MAX + 1.0f);
+    cloud.points[i].y = 1024 * rand () / (RAND_MAX + 1.0f);
+    cloud.points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);
+  }
+*/
+//  pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
+  std::cerr << "Saved " << cloud.points.size () << " data points to test_pcd.pcd." << std::endl;
+
+//  printf ("size is %d\n",cloud.points.size ());
+//  for (size_t i = 0; i < cloud.points.size (); ++i)
+//    std::cerr << "    " << cloud.points[i].x << " " << cloud.points[i].y << " " << cloud.points[i].z << std::endl;
+  std::cerr << "    " << cloud.points[cloud.height/2 + cloud.width/2].x << " " << cloud.points[cloud.height/2 + cloud.width/2].y << " " << cloud.points[cloud.height/2 + cloud.width/2].z << std::endl;
+
 
 /*
   // get width and height of 2D point cloud data

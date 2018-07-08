@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "sensor_msgs/PointCloud2.h"
+#include "sensor_msgs/PointField.h"
 
 #include <string.h>
 
@@ -15,14 +16,19 @@
 #include <iostream>
 #include <pcl/io/pcd_io.h>
 
+//ros::NodeHandle n;
+
 class Listenerpc2
 {
   public:
     void startListenerpc2();
 
+    void listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg);
+
   private:
     ros::NodeHandle n;
     ros::Subscriber sub;
+    ros::Publisher pub = n.advertise<sensor_msgs::PointCloud2>("laser_pc_cloud", 1);
 };
 
-void listenerpc2Callback(const sensor_msgs::PointCloud2& msg);
+//void listenerpc2Callback(const sensor_msgs::PointCloud2& msg);

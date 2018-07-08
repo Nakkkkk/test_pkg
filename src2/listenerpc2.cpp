@@ -3,34 +3,65 @@
 
 //typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 
-void listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg)
+//void listenerpc2Callback(const sensor_msgs::PointCloud2& msg)
+void Listenerpc2::listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg)
 {
   pcl::PointCloud<pcl::PointXYZ> cloud;
+//  pcl::PointCloud<pcl::uint8_t> cloud;
   pcl::fromROSMsg (*msg, cloud);
 
   printf ("Cloud: width = %d, height = %d\n", cloud.width, cloud.height);
 //  BOOST_FOREACH (const pcl::PointXYZ& pt, cloud.points)
 //  printf ("\t(%f, %f, %f)\n", pt.x, pt.y, pt.z);
 
-
   cloud.is_dense = false;
   cloud.points.resize (cloud.width * cloud.height);
-/*
-  for (size_t i = 0; i < cloud.points.size (); ++i)
-  {
-    cloud.points[i].x = 1024 * rand () / (RAND_MAX + 1.0f);
-    cloud.points[i].y = 1024 * rand () / (RAND_MAX + 1.0f);
-    cloud.points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);
-  }
-*/
-//  pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
-  std::cerr << "Saved " << cloud.points.size () << " data points to test_pcd.pcd." << std::endl;
 
-//  printf ("size is %d\n",cloud.points.size ());
+//  pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
+//  std::cerr << "Saved " << cloud.points.size () << " data points to test_pcd.pcd." << std::endl;
+
+  printf ("size is %d\n",cloud.points.size ());
 //  for (size_t i = 0; i < cloud.points.size (); ++i)
 //    std::cerr << "    " << cloud.points[i].x << " " << cloud.points[i].y << " " << cloud.points[i].z << std::endl;
-  std::cerr << "    " << cloud.points[cloud.height/2 + cloud.width/2].x << " " << cloud.points[cloud.height/2 + cloud.width/2].y << " " << cloud.points[cloud.height/2 + cloud.width/2].z << std::endl;
+//  std::cerr << "    " << cloud.points[(cloud.height/2)*cloud.width + cloud.width/2].x << " " << cloud.points[(cloud.height/2)*cloud.width + cloud.width/2].y << " " << cloud.points[(cloud.height/2)*cloud.width + cloud.width/2].z << std::endl;
 
+//std::cout << typeid(cloud.points[(cloud.height/2)*cloud.width + cloud.width/2].z).name() << std::endl;
+
+  sensor_msgs::PointCloud2 pc2;
+  printf("yea1\n");
+  pc2.height = 480;
+  pc2.width = 640;
+//  pc2.fields[0].offset = 0;
+//  pc2.fields[1].offset = 4;
+//  pc2.fields[2].offset = 8;
+//  pc2.is_bigendian = false;
+  pc2.point_step = 16;
+  pc2.row_step = 10240;
+//  pc2.is_dense = false;
+  printf("yea2\n");
+//  std::vector<pcl::uint8_t> data;
+
+  for (size_t i = 0; i < cloud.points.size()*16; ++i){
+/*
+    if((cloud.height/2)*cloud.width <= i && i <= (cloud.height/2)*cloud.width + cloud.width - 1){
+      pc2.data.push_back(cloud.points[i].x);
+      pc2.data.push_back(cloud.points[i].y);
+      pc2.data.push_back(cloud.points[i].z);
+    }
+*/
+//    else{
+      pc2.data.push_back(0);
+//    }
+  }
+
+  for (size_t i = 0; i < cloud.width*16; i=i+16){
+    pc2.data[(cloud.height/2)*16*cloud.width + i] =  cloud.points[i].x;
+    pc2.data[(cloud.height/2)*16*cloud.width + i + 4] =  cloud.points[i].y;
+    pc2.data[(cloud.height/2)*16*cloud.width + i + 8] =  cloud.points[i].z;
+  }
+
+//  pub = n.advertise<sensor_msgs::PointCloud2>("laser_pc_cloud", 1);
+  pub.publish(pc2);
 
 /*
   // get width and height of 2D point cloud data
@@ -48,17 +79,17 @@ void listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg)
   int arrayPosY = arrayPosition + msg.fields[1].offset; // Y has an offset of 4
   int arrayPosZ = arrayPosition + msg.fields[2].offset; // Z has an offset of 8
 
-  float X = 0.0;
-  float Y = 0.0;
-  float Z = 0.0;
+//  float X = 0.0;
+//  float Y = 0.0;
+//  float Z = 0.0;
 
-  memcpy(&X, &msg.data[arrayPosX], sizeof(float));
-  memcpy(&Y, &msg.data[arrayPosY], sizeof(float));
-  memcpy(&Z, &msg.data[arrayPosZ], sizeof(float));
+//  memcpy(&X, &msg.data[arrayPosX], sizeof(float));
+//  memcpy(&Y, &msg.data[arrayPosY], sizeof(float));
+//  memcpy(&Z, &msg.data[arrayPosZ], sizeof(float));
 
-  p.x = X;
-  p.y = Y;
-  p.z = Z;
+//  p.x = X;
+//  p.y = Y;
+//  p.z = Z;
 
   ROS_INFO("============================================");
   ROS_INFO("height: %d", msg.height);
@@ -81,5 +112,6 @@ void listenerpc2Callback(const sensor_msgs::PointCloud2ConstPtr& msg)
 
 void Listenerpc2::startListenerpc2()
 {
-  sub = n.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points", 1000, listenerpc2Callback);
+  sub = n.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points", 1000, &Listenerpc2::listenerpc2Callback, this);
+//  sub = n.subscribe("/camera/depth/points", 1000, listenerpc2Callback);
 }

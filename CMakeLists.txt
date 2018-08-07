@@ -24,9 +24,13 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   pcl_conversions
   pcl_msgs
+  image_transport
+  cv_bridge
 #  tf
 #　　tf2_eigen
 )
+
+find_package(OpenCV REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -247,6 +251,22 @@ include_directories(
 
 add_subdirectory(src1 src1)
 add_subdirectory(src2 src2)
+
+add_executable(image_proc src3/image_proc.cpp)
+target_link_libraries(image_proc ${catkin_LIBRARIES})
+target_link_libraries(image_proc ${OpenCV_LIBRARIES})
+
+add_executable(my_cv_pkg_node src3/my_cv_pkg_node.cpp)
+target_link_libraries(my_cv_pkg_node ${catkin_LIBRARIES})
+target_link_libraries(my_cv_pkg_node ${OpenCV_LIBRARIES})
+
+add_executable(image_proc3 src3/image_proc3.cpp)
+target_link_libraries(image_proc3 ${catkin_LIBRARIES})
+target_link_libraries(image_proc3 ${OpenCV_LIBRARIES})
+
+add_executable(follow src3/follow.cpp)
+target_link_libraries(follow ${catkin_LIBRARIES})
+target_link_libraries(follow ${OpenCV_LIBRARIES})
 
 link_directories(
   ${Boost_LIBRARY_DIRS}
